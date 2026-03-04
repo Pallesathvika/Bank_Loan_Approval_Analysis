@@ -1,0 +1,39 @@
+DEFINE
+    MEASURE 'calculated measure'[CIBIL Category] = VAR Score = SELECTEDVALUE('loan_project loan_approval_dataset'[cibil_score])
+RETURN
+SWITCH( TRUE(),
+    Score >= 750, "Excellent",
+    Score >= 700, "Good",
+    Score >= 600, "Average",
+    "Poor"
+)
+    MEASURE 'calculated measure'[Total Applications] = COUNT('loan_project loan_approval_dataset'[loan_id])
+    MEASURE 'calculated measure'[Avg CIBIL] = AVERAGE('loan_project loan_approval_dataset'[cibil_score])
+    MEASURE 'calculated measure'[Total Assets] = SUM('loan_project loan_approval_dataset'[bank_asset_value]) + 
+SUM('loan_project loan_approval_dataset'[commercial_assets_value]) + 
+SUM('loan_project loan_approval_dataset'[luxury_assets_value]) + 
+SUM('loan_project loan_approval_dataset'[residential_assets_value])
+    MEASURE 'calculated measure'[Approved Loans] = CALCULATE(COUNT('loan_project loan_approval_dataset'[loan_id]),
+'loan_project loan_approval_dataset'[loan_status] = "Approved")
+    MEASURE 'calculated measure'[Approval Rate %] = DIVIDE(
+    [Approved Loans],
+    COUNT('loan_project loan_approval_dataset'[loan_id]))
+    MEASURE 'calculated measure'[Total Loan Amount] = SUM('loan_project loan_approval_dataset'[loan_amount])
+    MEASURE 'calculated measure'[Rejected Loans] = CALCULATE(
+    COUNT('loan_project loan_approval_dataset'[loan_id]),
+    'loan_project loan_approval_dataset'[loan_status] = "Rejected"
+)
+    MEASURE 'calculated measure'[Avg Income] = AVERAGE('loan_project loan_approval_dataset'[income_annum])
+
+EVALUATE
+    SUMMARIZECOLUMNS(
+        "CIBIL Category", [CIBIL Category],
+        "Total Applications", [Total Applications],
+        "Avg CIBIL", [Avg CIBIL],
+        "Total Assets", [Total Assets],
+        "Approved Loans", [Approved Loans],
+        "Approval Rate %", [Approval Rate %],
+        "Total Loan Amount", [Total Loan Amount],
+        "Rejected Loans", [Rejected Loans],
+        "Avg Income", [Avg Income]
+    )
