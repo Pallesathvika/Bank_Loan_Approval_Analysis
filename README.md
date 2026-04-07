@@ -119,7 +119,9 @@ FROM loans;
 
 ## 📷 Dashboard Preview
 
-![Dashboard](download.jpeg)
+
+![Dashboard]<img width="1920" height="1020" alt="Screenshot 2026-03-03 225444" src="https://github.com/user-attachments/assets/30ce5e7d-95e0-4d56-98b9-7627cf0e398c" />
+
 
 ---
 
